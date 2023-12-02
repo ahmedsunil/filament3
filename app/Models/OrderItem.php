@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class BirdCount extends Model
+class OrderItem extends Model
 {
     use HasFactory;
     use SoftDeletes;
