@@ -13,6 +13,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Str;
 
 class ProductResource extends Resource
 {
@@ -31,8 +32,21 @@ class ProductResource extends Resource
                                     Forms\Components\TextInput::make('name')
                                                 ->required()
                                                 ->live(true)
-                                                ->unique(),
-                                    Forms\Components\TextInput::make('slug'),
+                                                ->unique()
+                                                ->afterStateUpdated(function (string $operation, $state, Forms\Set $set) {
+                                                    if ($operation != 'create') {
+                                                        return;
+                                                    }
+
+                                                    $set('slug', Str::slug($state));
+                                                }),
+
+                                    Forms\Components\TextInput::make('slug')
+                                                ->disabled()
+                                                ->dehydrated()
+                                                ->required()
+                                                ->unique(Product::class, 'slug', ignoreRecord: true),
+
                                     Forms\Components\MarkdownEditor::make('description')->columnSpan('full')
                             ])->columns(2),
 
